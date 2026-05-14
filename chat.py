@@ -17,12 +17,12 @@ llm = OllamaLLM(model="llama3.2:3b")
 
 # 3. Prompt
 prompt = PromptTemplate.from_template("""
-Você é um assistente que responde SOMENTE com base no contexto fornecido.
+Você é um assistente que responde SOMENTE com base no contexto de programação de computadores.
 NUNCA use conhecimento próprio. Se a informação não estiver no contexto abaixo, 
 responda EXATAMENTE: "Não encontrei essa informação na apostila."
 
 Contexto:
-{context}
+{context}n
 
 Pergunta: {question}
 Resposta:
