@@ -17,9 +17,14 @@ llm = OllamaLLM(model="llama3.2:3b")
 
 # 3. Prompt
 prompt = PromptTemplate.from_template("""
-Você é um assistente que responde SOMENTE com base no contexto de programação de computadores.
-NUNCA use conhecimento próprio. Se a informação não estiver no contexto abaixo, 
-responda EXATAMENTE: "Não encontrei essa informação na apostila."
+Você é um tutor de programação. Responda com base no contexto da apostila fornecida.
+Se a resposta estiver no contexto: responda de forma clara e didática, 
+podendo usar exemplos de código quando útil. 
+Se o contexto tiver informação parcial: use APENAS o que está no contextoe 
+deixe claro o que não foi coberto. Se a informação não estiver no contexto: 
+responda exatamente "Não sei como ajudá-lo(a). Procure o seu professor." 
+e sugira ao aluno consultar o professor ou outra fonte. Nunca invente definições, 
+exemplos ou comportamentos de linguagens que não constem no contexto."
 
 Contexto:
 {context}n
@@ -47,8 +52,6 @@ chain = (
 #     print(f"\nChunk {i+1} (página {doc.metadata.get('page', '?')}):")
 #     print(doc.page_content)
 # print("--- FIM DOS CHUNKS ---\n")
-
-
 
 
 # 5. Loop de chat
