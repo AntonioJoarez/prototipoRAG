@@ -10,24 +10,24 @@ vectorstore = Chroma(
     persist_directory="vectorstore",
     embedding_function=embeddings
 )
-retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
+retriever = vectorstore.as_retriever(search_kwargs={"k": 6})
 
 # 2. Configurar o LLM
-llm = OllamaLLM(model="llama3.2:3b")
+llm = OllamaLLM(model="llama3.2:3b", temperature=0.1)
 
 # 3. Prompt
 prompt = PromptTemplate.from_template("""
-Você é um tutor de programação. Responda com base no contexto da apostila fornecida.
+Você é um tutor de programação. Responda na lingua portuguesa, com base no contexto da apostila fornecida.
 Se a resposta estiver no contexto: responda de forma clara e didática, 
 podendo usar exemplos de código quando útil. 
 Se o contexto tiver informação parcial: use APENAS o que está no contextoe 
 deixe claro o que não foi coberto. Se a informação não estiver no contexto: 
 responda exatamente "Não sei como ajudá-lo(a). Procure o seu professor." 
 e sugira ao aluno consultar o professor ou outra fonte. Nunca invente definições, 
-exemplos ou comportamentos de linguagens que não constem no contexto."
+exemplos ou comportamentos de linguagens que não constem no contexto.
 
 Contexto:
-{context}n
+{context}
 
 Pergunta: {question}
 Resposta:

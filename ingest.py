@@ -12,8 +12,8 @@ print(f"{len(documents)} páginas carregadas.")
 # 2. Dividir em chunks
 print("Dividindo em chunks...")
 splitter = RecursiveCharacterTextSplitter(
-    chunk_size=500,
-    chunk_overlap=50
+    chunk_size=1000,
+    chunk_overlap=150
 )
 chunks = splitter.split_documents(documents)
 print(f"{len(chunks)} chunks criados.")
