@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tutor de Programação</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    button { font-family: inherit; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ---- Tela inicial (apresentação do projeto) ---- */
+
+    #landing {
+      --verde: #32a041;
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      background:
+        radial-gradient(circle at 85% 15%, rgba(50,160,65,0.16), transparent 40%),
+        radial-gradient(circle at 10% 90%, rgba(99,102,241,0.18), transparent 45%),
+        linear-gradient(135deg, #14142a 0%, #1f1f3d 55%, #2c2c5a 100%);
+      color: #e6e6f0;
+      padding: 28px 56px;
+      overflow-y: auto;
+    }
+
+    .landing-topo {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .logo-wrap {
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+
+    #logo-ifc {
+      height: 104px;
+      max-width: 220px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .logo-fallback {
+      display: none;
+      color: #1a1a2e;
+      font-size: 0.85rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .landing-badge {
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #c9c9dc;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 7px 14px;
+      border-radius: 20px;
+    }
+
+    .landing-corpo {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 64px;
+      align-items: center;
+      max-width: 1180px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 32px 0;
+      animation: surgir 0.5s ease;
+    }
+
+    .landing-sigla {
+      color: var(--verde);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .landing-hero h1 {
+      font-size: clamp(2rem, 3.6vw, 3.1rem);
+      line-height: 1.12;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 18px;
+    }
+
+    .landing-hero h1 span { color: var(--verde); }
+
+    .landing-lead {
+      font-size: 1.05rem;
+      line-height: 1.65;
+      color: #b8b8cc;
+      max-width: 470px;
+      margin-bottom: 30px;
+    }
+
+    #btn-iniciar {
+      background: var(--verde);
+      color: #fff;
+      border: none;
+      padding: 15px 34px;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(50,160,65,0.35);
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    #btn-iniciar:hover { background: #2b8c38; transform: translateY(-2px); }
+
+    .landing-pessoas {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 28px;
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      max-width: 500px;
+    }
+
+    .pessoa {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .avatar {
+      position: relative;
+      width: 76px;
+      height: 76px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: 2px solid var(--verde);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: #e6e6f0;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .avatar img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .landing-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 28px;
+      margin-top: 20px;
+      max-width: 500px;
+    }
+
+    .landing-info .rotulo,
+    .pessoa .rotulo {
+      display: block;
+      color: #8a8aa3;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .landing-info .valor,
+    .pessoa .valor { display: block; color: #e6e6f0; font-size: 0.9rem; font-weight: 500; line-height: 1.4; }
+
+    .landing-blocos {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .bloco {
+      display: flex;
+      gap: 18px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 20px 22px;
+      backdrop-filter: blur(6px);
+    }
+
+    .bloco .num {
+      color: var(--verde);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding-top: 2px;
+    }
+
+    .bloco h2 {
+      font-size: 1rem;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .bloco p {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #b8b8cc;
+    }
+
+    .bloco strong { color: #e6e6f0; font-weight: 600; }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .tags span {
+      font-size: 0.75rem;
+      color: #d6d6e6;
+      background: rgba(255,255,255,0.08);
+      padding: 4px 10px;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 900px) {
+      #landing { padding: 20px 16px; }
+      .landing-corpo { grid-template-columns: 1fr; gap: 32px; padding: 28px 0; }
+      .landing-badge { display: none; }
+      #logo-ifc { height: 80px; }
+      .landing-info, .landing-pessoas { grid-template-columns: 1fr; }
+    }
+
+    /* ---- Aplicação de chat ---- */
+
+    #app {
+      display: none;
+      flex-direction: column;
+      height: 100vh;
+      background: #f0f2f5;
+    }
+
+    header {
+      background: #1a1a2e;
+      color: #e0e0e0;
+      padding: 14px 20px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    header span.dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #4ade80;
+      display: inline-block;
+    }
+
+    #chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    #welcome {
+      margin: auto;
+      max-width: 520px;
+      text-align: center;
+      padding: 32px 24px;
+      animation: surgir 0.4s ease;
+    }
+
+    #welcome .icone {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      background: #1a1a2e;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+    }
+
+    #welcome h1 {
+      font-size: 1.4rem;
+      color: #1a1a2e;
+      margin-bottom: 10px;
+    }
+
+    #welcome p {
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    #sugestoes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .chip {
+      background: #fff;
+      border: 1.5px solid #d8d8e0;
+      color: #1a1a2e;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .chip:hover {
+      background: #eef0fb;
+      border-color: #1a1a2e;
+    }
+
+    @keyframes surgir {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .mensagem {
+      max-width: 75%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      line-height: 1.6;
+      font-size: 0.95rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .mensagem.usuario {
+      align-self: flex-end;
+      background: #1a1a2e;
+      color: #f0f0f0;
+      border-bottom-right-radius: 4px;
+    }
+
+    .mensagem.assistente {
+      align-self: flex-start;
+      background: #ffffff;
+      color: #1a1a1a;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    .mensagem code {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.9em;
+    }
+
+    .mensagem pre {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 8px;
+      font-size: 0.88em;
+    }
+
+    .mensagem pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: #555;
+      margin-left: 2px;
+      animation: piscar 0.7s step-end infinite;
+      vertical-align: text-bottom;
+    }
+
+    @keyframes piscar { 50% { opacity: 0; } }
+
+    #rodape {
+      padding: 14px 16px;
+      background: #fff;
+      border-top: 1px solid #e0e0e0;
+      display: flex;
+      gap: 8px;
+    }
+
+    #input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1.5px solid #d0d0d0;
+      border-radius: 24px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: none;
+      max-height: 120px;
+      font-family: inherit;
+    }
+
+    #input:focus { border-color: #1a1a2e; }
+
+    #btn {
+      background: #1a1a2e;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 46px;
+      height: 46px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    #btn:hover { background: #2d2d4e; }
+    #btn:disabled { background: #aaa; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+
+<div id="landing">
+  <div class="landing-topo">
+    <div class="logo-wrap">
+      <img id="logo-ifc" src="/static/logo-ifc.png" alt="Logo IFC Campus Fraiburgo"
+           onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='block';">
+      <div id="logo-fallback" class="logo-fallback">IFC · Campus Fraiburgo</div>
+    </div>
+    <span class="landing-badge">Projeto de Pesquisa · PIBITI/CNPq</span>
+  </div>
+
+  <main class="landing-corpo">
+    <section class="landing-hero">
+      <p class="landing-sigla">Projeto PROG-GENIA</p>
+      <h1>Tutor de Programação com <span>IA</span></h1>
+      <p class="landing-lead">
+        Um assistente que responde com base em materiais de referência, explorando como a IA
+        generativa pode apoiar o ensino de programação de forma confiável e responsável.
+      </p>
+      <button id="btn-iniciar">Iniciar conversa &rarr;</button>
+
+      <div class="landing-pessoas">
+        <div class="pessoa">
+          <div class="avatar">
+            <img src="/static/foto-autor.jpg" alt="Foto de Antônio Joares dos Santos Júnior"
+                 onerror="this.remove()">
+            <span>AJ</span>
+          </div>
+          <div>
+            <span class="rotulo">Autor</span>
+            <span class="valor">Antônio Joares dos Santos Júnior</span>
+          </div>
+        </div>
+        <div class="pessoa">
+          <div class="avatar">
+            <img src="/static/foto-orientador.jpg" alt="Foto do Prof. Rafael Leonardo Vivian"
+                 onerror="this.remove()">
+            <span>RV</span>
+          </div>
+          <div>
+            <span class="rotulo">Orientador</span>
+            <span class="valor">Prof. Rafael Leonardo Vivian</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="landing-info">
+        <div><span class="rotulo">Instituição</span><span class="valor">IFC — Campus Fraiburgo</span></div>
+        <div><span class="rotulo">Curso</span><span class="valor">Tecnologia em Análise e Desenvolvimento de Sistemas</span></div>
+      </div>
+    </section>
+
+    <section class="landing-blocos">
+      <div class="bloco">
+        <span class="num">01</span>
+        <div>
+          <h2>O cenário</h2>
+          <p>Ferramentas como o ChatGPT já fazem parte da rotina de quem aprende a programar.
+          Explicam conceitos e aceleram o estudo, mas trazem riscos: respostas incorretas,
+          dependência excessiva e uso que compromete a integridade acadêmica.</p>
+        </div>
+      </div>
+      <div class="bloco">
+        <span class="num">02</span>
+        <div>
+          <h2>Revisão sistemática</h2>
+          <p>Conduzida segundo o protocolo <strong>PRISMA</strong> nas bases Scopus e BASE, mapeia
+          ferramentas, contextos de ensino, benefícios, desafios e estratégias contra a desonestidade
+          acadêmica. A perspectiva docente e a integridade acadêmica ainda são pouco exploradas.</p>
+        </div>
+      </div>
+      <div class="bloco">
+        <span class="num">03</span>
+        <div>
+          <h2>Este protótipo</h2>
+          <p>Um tutor baseado em <strong>RAG</strong> (Retrieval-Augmented Generation): busca trechos
+          de materiais de referência antes de responder. Roda localmente, sem enviar dados dos
+          estudantes a serviços externos.</p>
+          <div class="tags">
+            <span>LLaMA 3.2</span><span>Ollama</span><span>nomic-embed-text</span><span>ChromaDB</span><span>LangChain</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="app">
+
+  <header>
+    <span class="dot"></span>
+    Tutor de Programação — RAG
+  </header>
+
+  <div id="chat">
+    <div id="welcome">
+      <div class="icone">🤖</div>
+      <h1>Olá! Eu sou seu Tutor de Programação</h1>
+      <p>Estou aqui para te ajudar a entender o conteúdo da apostila. Pergunte sobre conceitos,
+      peça exemplos de código ou explicações passo a passo. Experimente uma das sugestões abaixo
+      ou digite sua própria pergunta.</p>
+      <div id="sugestoes">
+        <button class="chip">O que é uma variável?</button>
+        <button class="chip">Como funciona um loop for?</button>
+        <button class="chip">Explique o que é uma função</button>
+        <button class="chip">Qual a diferença entre lista e tupla?</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="rodape">
+    <textarea id="input" rows="1" placeholder="Digite sua pergunta..."></textarea>
+    <button id="btn" title="Enviar">&#10148;</button>
+  </div>
+
+</div>
+
+<script>
+  const chat = document.getElementById('chat');
+  const input = document.getElementById('input');
+  const btn = document.getElementById('btn');
+  const landing = document.getElementById('landing');
+  const appEl = document.getElementById('app');
+  const btnIniciar = document.getElementById('btn-iniciar');
+
+  btnIniciar.addEventListener('click', () => {
+    landing.style.display = 'none';
+    appEl.style.display = 'flex';
+    input.focus();
+  });
+
+  function adicionarMensagem(texto, tipo) {
+    const div = document.createElement('div');
+    div.className = `mensagem ${tipo}`;
+    div.textContent = texto;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+    return div;
+  }
+
+  function formatarTexto(el, texto) {
+    // Renderiza blocos de código ```...```
+    const partes = texto.split(/(```[\s\S]*?```)/g);
+    el.innerHTML = '';
+    partes.forEach(parte => {
+      if (parte.startsWith('```') && parte.endsWith('```')) {
+        const pre = document.createElement('pre');
+        const code = document.createElement('code');
+        code.textContent = parte.slice(3, -3).replace(/^\w+\n/, '');
+        pre.appendChild(code);
+        el.appendChild(pre);
+      } else {
+        // Renderiza `inline code`
+        const frag = document.createDocumentFragment();
+        parte.split(/(`[^`]+`)/g).forEach(p => {
+          if (p.startsWith('`') && p.endsWith('`')) {
+            const code = document.createElement('code');
+            code.textContent = p.slice(1, -1);
+            frag.appendChild(code);
+          } else {
+            frag.appendChild(document.createTextNode(p));
+          }
+        });
+        el.appendChild(frag);
+      }
+    });
+  }
+
+  function removerBoasVindas() {
+    const welcome = document.getElementById('welcome');
+    if (welcome) welcome.remove();
+  }
+
+  async function enviar(textoForcado) {
+    const texto = (textoForcado ?? input.value).trim();
+    if (!texto) return;
+
+    removerBoasVindas();
+
+    input.value = '';
+    input.style.height = 'auto';
+    btn.disabled = true;
+
+    adicionarMensagem(texto, 'usuario');
+
+    const div = document.createElement('div');
+    div.className = 'mensagem assistente';
+    const cursor = document.createElement('span');
+    cursor.className = 'cursor';
+    div.appendChild(cursor);
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+
+    let acumulado = '';
+
+    try {
+      const resp = await fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: texto })
+      });
+
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const linhas = buffer.split('\n\n');
+        buffer = linhas.pop();
+
+        for (const linha of linhas) {
+          if (!linha.startsWith('data: ')) continue;
+          const dado = linha.slice(6);
+          if (dado === '[DONE]') continue;
+          try {
+            const obj = JSON.parse(dado);
+            acumulado += obj.token;
+            formatarTexto(div, acumulado);
+            div.appendChild(cursor);
+            chat.scrollTop = chat.scrollHeight;
+          } catch {}
+        }
+      }
+    } catch (e) {
+      div.textContent = 'Erro ao conectar com o servidor.';
+    }
+
+    cursor.remove();
+    formatarTexto(div, acumulado);
+    btn.disabled = false;
+    input.focus();
+  }
+
+  document.querySelectorAll('#sugestoes .chip').forEach(chip => {
+    chip.addEventListener('click', () => enviar(chip.textContent));
+  });
+
+  btn.addEventListener('click', () => enviar());
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      enviar();
+    }
+  });
+
+  input.addEventListener('input', () => {
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+  });
+</script>
+</body>
+</html>
